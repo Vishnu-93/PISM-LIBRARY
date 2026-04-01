@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISM LIBRARY - Patel Institute of Science and Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0d1b2a; min-height: 100vh; color: #333; }
+        .header { background: rgba(13, 27, 42, 0.98); padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); }
+        .logo-section { display: flex; align-items: center; gap: 15px; }
+        .college-logo { width: 55px; height: 55px; background: linear-gradient(135deg, #e0a526, #c48a1f); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; border: 3px solid rgba(255,255,255,0.2); }
+        .logo-text h1 { color: white; font-size: 1.4rem; font-weight: 800; font-family: 'Playfair Display', serif; }
+        .logo-text p { color: #e0a526; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; }
+        .nav-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn { padding: 10px 18px; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.7rem; transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; display: inline-block; }
+        .btn-primary { background: linear-gradient(135deg, #e0a526, #c48a1f); color: #0d1b2a; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(224, 165, 38, 0.4); }
+        .btn-secondary { background: transparent; color: white; border: 2px solid #e0a526; }
+        .btn-secondary:hover { background: #e0a526; color: #0d1b2a; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-success { background: #2ecc71; color: white; }
+        .btn-purple { background: #9b59b6; color: white; }
+        .btn-orange { background: #e67e22; color: white; }
+        .btn-sm { padding: 5px 10px; font-size: 0.65rem; border-radius: 12px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
+        .auth-container { display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 85px); padding: 20px; }
+        .auth-box { background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: 100%; max-width: 480px; overflow: hidden; }
+        .login-tabs { display: flex; background: #f5f5f5; }
+        .login-tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; font-weight: 600; font-size: 0.75rem; border: none; transition: all 0.3s; }
+        .login-tab.active { background: linear-gradient(135deg, #0d1b2a, #1b263b); color: white; }
+        .login-tab.admin-active { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+        .login-tab.teacher-active { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; }
+        .auth-header { background: linear-gradient(135deg, #0d1b2a, #1b263b); padding: 25px; text-align: center; color: white; }
+        .auth-header.admin { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .auth-header.teacher { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .auth-header h2 { font-size: 1.3rem; margin-bottom: 5px; font-family: 'Playfair Display', serif; }
+        .auth-header p { opacity: 0.9; font-size: 0.75rem; }
+        .auth-form { padding: 25px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #0d1b2a; font-size: 0.7rem; text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.85rem; transition: all 0.3s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #e0a526; }
+        
+        /* Password Field Styles */
+        .password-field { position: relative; }
+        .password-field input { padding-right: 45px; width: 100%; }
+        .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.1rem; opacity: 0.5; transition: opacity 0.3s; }
+        .toggle-password:hover { opacity: 1; }
+        
+        .form-switch { text-align: center; margin-top: 15px; color: #666; font-size: 0.8rem; }
+        .form-switch a { color: #c48a1f; font-weight: 700; cursor: pointer; text-decoration: none; }
+        .dashboard-section { display: none; }
+        .dashboard-section.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .welcome-banner { background: linear-gradient(135deg, #e0a526, #c48a1f); border-radius: 20px; padding: 35px; margin-bottom: 25px; color: #0d1b2a; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .welcome-banner h2 { font-size: 1.5rem; font-family: 'Playfair Display', serif; }
+        .welcome-banner p { opacity: 0.8; margin-top: 5px; }
+        .library-image { width: 100px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: white; border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); transition: all 0.3s; position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #e0a526, #c48a1f); }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card .icon { font-size: 2rem; margin-bottom: 8px; }
+        .stat-card h3 { color: #0d1b2a; font-size: 1.4rem; margin-bottom: 5px; }
+        .stat-card p { color: #666; font-weight: 500; text-transform: uppercase; font-size: 0.6rem; }
+        .content-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        .content-tab { padding: 10px 18px; background: white; border: 2px solid #e0e0e0; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.8rem; }
+        .content-tab.active { background: #e0a526; color: #0d1b2a; border-color: #e0a526; }
+        .search-section { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        .search-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .search-input { flex: 1; min-width: 200px; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.85rem; }
+        .search-input:focus { outline: none; border-color: #e0a526; }
+        .filter-select { padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.85rem; min-width: 120px; cursor: pointer; }
+        .subject-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); margin-bottom: 15px; }
+        .subject-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0; margin-bottom: 15px; }
+        .subject-header h4 { color: #0d1b2a; font-size: 1rem; display: flex; align-items: center; gap: 10px; }
+        .subject-badge { background: #e0a526; color: #0d1b2a; padding: 4px 12px; border-radius: 15px; font-size: 0.6rem; font-weight: 700; }
+        .unit-item { background: #f8f9fa; border-radius: 10px; padding: 12px 15px; margin-bottom: 10px; border-left: 3px solid #9b59b6; }
+        .unit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .unit-header h5 { color: #9b59b6; font-size: 0.85rem; }
+        .materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+        .material-mini { background: white; border-radius: 10px; padding: 15px; border: 2px solid #e0e0e0; text-align: center; transition: all 0.3s; cursor: pointer; }
+        .material-mini:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); border-color: #e0a526; }
+        .material-mini .icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .material-mini .name { font-size: 0.8rem; color: #0d1b2a; font-weight: 600; word-break: break-word; margin-bottom: 8px; min-height: 40px; }
+        .material-mini .type-badge { background: #e8f4f8; color: #0d1b2a; padding: 3px 10px; border-radius: 12px; font-size: 0.65rem; display: inline-block; margin-bottom: 8px; }
+        .material-mini .actions { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); transition: all 0.3s; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); }
+        .card-cover { height: 200px; background: linear-gradient(135deg, #0d1b2a, #1b263b); display: flex; align-items: center; justify-content: center; font-size: 5rem; position: relative; }
+        .card-badge { position: absolute; top: 10px; right: 10px; background: #e0a526; color: #0d1b2a; padding: 5px 12px; border-radius: 15px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
+        .card-body { padding: 20px; }
+        .card-body h3 { color: #0d1b2a; font-size: 1rem; margin-bottom: 10px; line-height: 1.4; font-weight: 700; }
+        .card-body .meta { color: #666; font-size: 0.85rem; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+        .card-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; }
+        .card-course { background: linear-gradient(135deg, #e8f4f8, #d1e9f6); color: #0d1b2a; padding: 5px 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+        .card-status { font-weight: 700; font-size: 0.75rem; }
+        .card-status.available { color: #2ecc71; }
+        .card-status.issued { color: #e74c3c; }
+        .card-actions { padding: 0 20px 20px; display: flex; gap: 8px; }
+        .card-actions .btn { flex: 1; text-align: center; }
+        .admin-tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 12px; }
+        .admin-tab { padding: 10px 15px; background: transparent; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: white; transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.65rem; text-decoration: none; }
+        .admin-tab.active, .admin-tab:hover { background: #e0a526; color: #0d1b2a; }
+        .admin-content { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        .admin-section { display: none; }
+        .admin-section.active { display: block; }
+        .admin-section h3 { color: #0d1b2a; margin-bottom: 15px; font-size: 1.1rem; font-family: 'Playfair Display', serif; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .data-table th, .data-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 0.8rem; }
+        .data-table th { background: linear-gradient(135deg, #0d1b2a, #1b263b); color: white; font-weight: 600; text-transform: uppercase; font-size: 0.65rem; }
+        .data-table tr:hover { background: #f8f9fa; }
+        .status-badge { padding: 4px 10px; border-radius: 15px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
+        .status-badge.active, .status-badge.available { background: #d4edda; color: #2ecc71; }
+        .status-badge.inactive, .status-badge.issued { background: #f8d7da; color: #e74c3c; }
+        .action-btn { padding: 6px 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: 600; text-decoration: none; display: inline-block; margin-right: 5px; }
+        .add-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 15px; padding: 20px; background: #f8f9fa; border-radius: 15px; }
+        .add-form input, .add-form select, .add-form textarea { padding: 10px 14px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.85rem; }
+        .select-with-add { position: relative; }
+        .select-with-add select { width: 100%; padding-right: 45px; }
+        .select-with-add .add-btn { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: #e0a526; color: #0d1b2a; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 1.2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 20px; padding: 0; max-width: 1000px; width: 100%; max-height: 95vh; overflow: hidden; display: flex; flex-direction: column; animation: modalSlide 0.3s ease; }
+        .modal-content.small { max-width: 500px; overflow-y: auto; padding: 25px; display: block; height: auto; max-height: 90vh; }
+        @keyframes modalSlide { from { opacity: 0; transform: scale(0.95) translateY(-20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-header { background: linear-gradient(135deg, #0d1b2a, #1b263b); padding: 20px 25px; color: white; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .modal-header h3 { color: white; font-size: 1.2rem; font-family: 'Playfair Display', serif; }
+        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: rgba(255,255,255,0.8); padding: 5px; }
+        .modal-close:hover { color: white; }
+        .reader-meta { background: #f8f9fa; padding: 15px 25px; border-bottom: 1px solid #eee; display: flex; gap: 15px; flex-wrap: wrap; font-size: 0.85rem; color: #666; flex-shrink: 0; }
+        .reader-meta span { display: flex; align-items: center; gap: 5px; }
+        .reader-body { flex: 1; overflow: auto; background: #333; display: flex; justify-content: center; padding: 20px; }
+        .reader-content { width: 100%; max-width: 800px; background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.3); min-height: 600px; }
+        .reader-content pre { padding: 30px; white-space: pre-wrap; word-wrap: break-word; font-size: 0.95rem; line-height: 1.8; color: #333; font-family: 'Poppins', sans-serif; margin: 0; }
+        .reader-content iframe { width: 100%; height: 700px; border: none; }
+        .reader-actions { background: #f8f9fa; padding: 15px 25px; border-top: 1px solid #eee; display: flex; gap: 10px; flex-wrap: wrap; flex-shrink: 0; }
+        .book-detail { padding: 30px; }
+        .book-detail-grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
+        .book-detail-cover { background: linear-gradient(135deg, #0d1b2a, #1b263b); height: 400px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 8rem; position: relative; }
+        .book-detail-cover .badge { position: absolute; top: 15px; left: 15px; background: #e0a526; color: #0d1b2a; padding: 5px 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+        .book-detail-info h2 { color: #0d1b2a; font-size: 1.5rem; margin-bottom: 10px; font-family: 'Playfair Display', serif; }
+        .book-detail-info .author { font-size: 1.1rem; color: #666; margin-bottom: 25px; }
+        .book-detail-row { display: flex; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .book-detail-row .label { width: 150px; font-weight: 600; color: #0d1b2a; }
+        .book-detail-row .value { flex: 1; color: #555; }
+        .book-detail-actions { margin-top: 25px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .toast-container { position: fixed; top: 90px; right: 15px; z-index: 3000; }
+        .toast { background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2); margin-bottom: 10px; display: flex; align-items: center; gap: 12px; min-width: 280px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(150%); } to { transform: translateX(0); } }
+        .toast.success { border-left: 5px solid #2ecc71; }
+        .toast.error { border-left: 5px solid #e74c3c; }
+        .user-info { display: flex; align-items: center; gap: 8px; color: white; background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 25px; font-size: 0.85rem; }
+        .user-avatar { width: 30px; height: 30px; background: #e0a526; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #0d1b2a; font-size: 0.8rem; }
+        @media (max-width: 768px) {
+            .header { flex-direction: column; gap: 12px; padding: 12px; }
+            .logo-text h1 { text-align: center; font-size: 1.2rem; }
+            .logo-text p { text-align: center; }
+            .nav-buttons { width: 100%; justify-content: center; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .book-detail-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <header class="header">
+        <div class="logo-section">
+            <div class="college-logo">🎓</div>
+            <div class="logo-text">
+                <h1>PISM LIBRARY</h1>
+                <p>Patel Institute of Science & Management</p>
+            </div>
+        </div>
+        <nav class="nav-buttons" id="navButtons">
+            <button class="btn btn-secondary" onclick="showLogin('student')">👨‍🎓 Student</button>
+            <button class="btn btn-purple" onclick="showLogin('teacher')">👨‍🏫 Teacher</button>
+            <button class="btn btn-danger" onclick="showLogin('admin')">🔐 Admin</button>
+            <button class="btn btn-primary" onclick="showRegister()">📝 Register</button>
+        </nav>
+    </header>
+
+    <!-- Login Section -->
+    <section class="auth-container" id="loginSection">
+        <div class="auth-box">
+            <div class="login-tabs">
+                <button class="login-tab active" id="studentTab" onclick="showLogin('student')">👨‍🎓 Student</button>
+                <button class="login-tab" id="teacherTab" onclick="showLogin('teacher')">👨‍🏫 Teacher</button>
+                <button class="login-tab" id="adminTab" onclick="showLogin('admin')">🔐 Admin</button>
+            </div>
+
+            <div id="studentLoginForm">
+                <div class="auth-header"><h2>👨‍🎓 Student Login</h2><p>Access Your Library</p></div>
+                <form class="auth-form" onsubmit="handleLogin(event, 'student')">
+                    <div class="form-group"><label>College ID / Email</label><input type="text" id="studentLoginId" placeholder="Enter College ID" required></div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-field">
+                            <input type="password" id="studentLoginPass" placeholder="Password" required>
+                            <span class="toggle-password" onclick="togglePassword('studentLoginPass')">👁️</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
+                    <p class="form-switch"><a onclick="showForgotPassword()">Forgot Password?</a> | <a onclick="showRegister('student')">Register</a></p>
+                </form>
+            </div>
+
+            <div id="teacherLoginForm" style="display:none">
+                <div class="auth-header teacher"><h2>👨‍🏫 Teacher Login</h2><p>Faculty Portal</p></div>
+                <form class="auth-form" onsubmit="handleLogin(event, 'teacher')">
+                    <div class="form-group"><label>Teacher ID / Email</label><input type="text" id="teacherLoginId" placeholder="Enter Teacher ID" required></div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-field">
+                            <input type="password" id="teacherLoginPass" placeholder="Password" required>
+                            <span class="toggle-password" onclick="togglePassword('teacherLoginPass')">👁️</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-purple" style="width:100%">Login</button>
+                    <p class="form-switch"><a onclick="showForgotPassword()">Forgot Password?</a> | <a onclick="showRegister('teacher')">Register</a></p>
+                </form>
+            </div>
+
+            <div id="adminLoginForm" style="display:none">
+                <div class="auth-header admin"><h2>🔐 Admin Login</h2><p>Library Administration</p></div>
+                <form class="auth-form" onsubmit="handleLogin(event, 'admin')">
+                    <div class="form-group"><label>Admin ID</label><input type="text" id="adminLoginId" placeholder="Enter Admin ID" required></div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-field">
+                            <input type="password" id="adminLoginPass" placeholder="Password" required>
+                            <span class="toggle-password" onclick="togglePassword('adminLoginPass')">👁️</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger" style="width:100%">Login</button>
+                    <p class="form-switch"><a onclick="showForgotPassword()">Forgot Password?</a></p>
+                    <p style="text-align:center;margin-top:12px;font-size:0.7rem;color:#888;">Demo: ADMIN001 / admin123</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Register Section -->
+    <section class="auth-container" id="registerSection" style="display:none">
+        <div class="auth-box">
+            <div class="login-tabs">
+                <button class="login-tab active" id="studentRegTab" onclick="showRegister('student')">👨‍🎓 Student</button>
+                <button class="login-tab" id="teacherRegTab" onclick="showRegister('teacher')">👨‍🏫 Teacher</button>
+                <button class="login-tab" id="adminRegTab" onclick="showRegister('admin')">🔐 Admin</button>
+            </div>
+
+            <div id="studentRegForm">
+                <div class="auth-header"><h2>👨‍🎓 Student Registration</h2><p>Join PISM Library</p></div>
+                <form class="auth-form" onsubmit="handleRegister(event, 'student')">
+                    <div class="form-group"><label>Full Name</label><input type="text" id="studentRegName" placeholder="Full Name" required></div>
+                    <div class="form-group"><label>College ID</label><input type="text" id="studentRegCollegeId" placeholder="e.g., PISM/BCA/2024/001" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="studentRegEmail" placeholder="your.email@pism.edu" required></div>
+                    <div class="form-group"><label>Course</label>
+                        <select id="studentRegCourse" required>
+                            <option value="">Select Course</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BCOM">BCOM</option>
+                            <option value="BBA">BBA</option>
+                            <option value="BA">BA</option>
+                            <option value="MBA">MBA</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-field">
+                            <input type="password" id="studentRegPass" placeholder="Create password" required>
+                            <span class="toggle-password" onclick="togglePassword('studentRegPass')">👁️</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width:100%">Register</button>
+                    <p class="form-switch"><a onclick="showLogin('student')">Already registered? Login</a></p>
+                </form>
+            </div>
+
+            <div id="teacherRegForm" style="display:none">
+                <div class="auth-header teacher"><h2>👨‍🏫 Teacher Registration</h2><p>Faculty Portal</p></div>
+                <form class="auth-form" onsubmit="handleRegister(event, 'teacher')">
+                    <div class="form-group"><label>Full Name</label><input type="text" id="teacherRegName" placeholder="Full Name" required></div>
+                    <div class="form-group"><label>Teacher ID</label><input type="text" id="teacherRegCollegeId" placeholder="e.g., T001" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="teacherRegEmail" placeholder="teacher@pism.edu" required></div>
+                    <div class="form-group"><label>Department</label>
+                        <select id="teacherRegDept" required>
+                            <option value="">Select Department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Commerce">Commerce</option>
+                            <option value="Management">Management</option>
+                            <option value="Arts">Arts</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-field">
+                            <input type="password" id="teacherRegPass" placeholder="Create password" required>
+                            <span class="toggle-password" onclick="togglePassword('teacherRegPass')">👁️</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-purple" style="width:100%">Register</button>
+                    <p class="form-switch"><a onclick="showLogin('teacher')">Already registered? Login</a></p>
+                </form>
+            </div>
+
+            <div id="adminRegForm" style="display:none">
+                <div class="auth-header admin"><h2>🔐 Admin Registration</h2><p>New Admin Account</p></div>
+                <form class="auth-form" onsubmit="handleRegister(event, 'admin')">
+                    <div class="form-group"><label>Full Name</label><input type="text" id="adminRegName" placeholder="Full Name" required></div>
+                    <div class="form-group"><label>Admin ID</label><input type="text" id="adminRegCollegeId" placeholder="e.g., ADMIN004" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="adminRegEmail" placeholder="admin@pism.edu" required></div>
+                    <div class="form-group"><label>Designation</label>
+                        <select id="adminRegDesig" required>
+                            <option value="">Select Designation</option>
+                            <option value="Main Admin">Main Admin</option>
+                            <option value="Library Manager">Library Manager</option>
+                            <option value="Library Assistant">Library Assistant</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-field">
+                            <input type="password" id="adminRegPass" placeholder="Create password" required>
+                            <span class="toggle-password" onclick="togglePassword('adminRegPass')">👁️</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger" style="width:100%">Register</button>
+                    <p class="form-switch"><a onclick="showLogin('admin')">Already registered? Login</a></p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Dashboard -->
+    <section class="dashboard-section" id="studentDashboard">
+        <div class="container">
+            <div class="welcome-banner">
+                <div><h2>Welcome, <span id="studentName">Student</span>! 📚</h2><p>Read materials, download files, and manage book issues</p></div>
+                <div class="library-image">🏛️</div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="icon">📚</div><h3 id="stdSubjects">0</h3><p>Subjects</p></div>
+                <div class="stat-card"><div class="icon">📄</div><h3 id="stdMaterials">0</h3><p>Materials</p></div>
+                <div class="stat-card"><div class="icon">📖</div><h3 id="stdBooks">0</h3><p>Books</p></div>
+                <div class="stat-card"><div class="icon">📋</div><h3 id="stdIssued">0</h3><p>Issued</p></div>
+            </div>
+            <div class="content-tabs">
+                <button class="content-tab active" onclick="showStudentTab('materials')" id="stdMatTab">📚 Study Materials</button>
+                <button class="content-tab" onclick="showStudentTab('books')" id="stdBooksTab">📖 Library Books</button>
+                <button class="content-tab" onclick="showStudentTab('myissues')" id="stdIssuesTab">📋 My Issues</button>
+            </div>
+            <div id="stdMaterialsContent">
+                <div class="search-section">
+                    <div class="search-row">
+                        <input type="text" class="search-input" id="stdSearchMat" placeholder="🔍 Search subjects or materials..." onkeyup="renderStudentSubjects()">
+                        <select class="filter-select" id="stdMatCourseFilter" onchange="renderStudentSubjects()">
+                            <option value="">All Courses</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BCOM">BCOM</option>
+                            <option value="BBA">BBA</option>
+                            <option value="BA">BA</option>
+                            <option value="MBA">MBA</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="subjectsList"></div>
+            </div>
+            <div id="stdBooksContent" style="display:none">
+                <div class="search-section">
+                    <div class="search-row">
+                        <input type="text" class="search-input" id="stdSearchBooks" placeholder="🔍 Search books..." onkeyup="renderStudentBooks()">
+                        <select class="filter-select" id="stdBookCourseFilter" onchange="renderStudentBooks()">
+                            <option value="">All Courses</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BCOM">BCOM</option>
+                            <option value="BBA">BBA</option>
+                            <option value="BA">BA</option>
+                            <option value="MBA">MBA</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="cards-grid" id="studentBooksGrid"></div>
+            </div>
+            <div id="stdIssuesContent" style="display:none">
+                <div class="search-section"><h3>📋 My Issued Books</h3></div>
+                <div id="myIssuesList"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teacher Dashboard -->
+    <section class="dashboard-section" id="teacherDashboard">
+        <div class="container">
+            <div class="welcome-banner" style="background:linear-gradient(135deg,#9b59b6,#8e44ad)">
+                <div><h2 style="color:white">Welcome, <span id="teacherName">Teacher</span>! 👨‍🏫</h2><p style="color:rgba(255,255,255,0.8)">Upload materials and manage study resources</p></div>
+                <div class="library-image">📚</div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="icon">📚</div><h3 id="tchSubjects">0</h3><p>My Subjects</p></div>
+                <div class="stat-card"><div class="icon">📄</div><h3 id="tchMaterials">0</h3><p>Materials</p></div>
+            </div>
+            <div class="content-tabs">
+                <button class="content-tab active" onclick="showTeacherTab('subjects')" id="tchSubTab">📚 My Subjects</button>
+                <button class="content-tab" onclick="showTeacherTab('addSubject')" id="tchAddSubTab">➕ Create Subject</button>
+            </div>
+            <div id="tchSubjectsContent"></div>
+            <div id="tchAddSubjectContent" style="display:none">
+                <div class="admin-content">
+                    <h3>➕ Create New Subject with Units</h3>
+                    <form class="add-form" onsubmit="createSubjectWithUnits(event, 'teacher')">
+                        <input type="text" id="subName" placeholder="Subject Name" required>
+                        <select id="subCourse" required>
+                            <option value="">Select Course</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BCOM">BCOM</option>
+                            <option value="BBA">BBA</option>
+                            <option value="BA">BA</option>
+                            <option value="MBA">MBA</option>
+                        </select>
+                        <input type="number" id="subUnitCount" placeholder="No. of Units" min="1" max="10" required onchange="generateUnitInputs()">
+                        <div id="unitNamesContainer"></div>
+                        <button type="submit" class="btn btn-purple" style="grid-column:1/-1">➕ Create Subject</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Dashboard -->
+    <section class="dashboard-section" id="adminDashboard">
+        <div class="container">
+            <div class="welcome-banner" style="background:linear-gradient(135deg,#e74c3c,#c0392b)">
+                <div><h2 style="color:white">🔧 Admin Dashboard</h2><p style="color:rgba(255,255,255,0.8)">Full Library Control</p></div>
+                <div class="library-image">⚙️</div>
+            </div>
+            <div class="admin-tabs">
+                <a href="#" class="admin-tab active" onclick="showAdminTab('subjects', event)">📚 Subjects</a>
+                <a href="#" class="admin-tab" onclick="showAdminTab('materials', event)">📄 Materials</a>
+                <a href="#" class="admin-tab" onclick="showAdminTab('books', event)">📖 Books</a>
+                <a href="#" class="admin-tab" onclick="showAdminTab('issues', event)">📋 Issues</a>
+                <a href="#" class="admin-tab" onclick="showAdminTab('users', event)">👥 Users</a>
+                <a href="#" class="admin-tab" onclick="showAdminTab('reports', event)">📊 Reports</a>
+            </div>
+            <div class="admin-content">
+                <div class="admin-section active" id="subjectsSection">
+                    <h3>➕ Create New Subject with Units</h3>
+                    <form class="add-form" onsubmit="createSubjectWithUnits(event, 'admin')">
+                        <input type="text" id="adminSubName" placeholder="Subject Name" required>
+                        <select id="adminSubCourse" required>
+                            <option value="">Select Course</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BCOM">BCOM</option>
+                            <option value="BBA">BBA</option>
+                            <option value="BA">BA</option>
+                            <option value="MBA">MBA</option>
+                        </select>
+                        <input type="number" id="adminSubUnitCount" placeholder="No. of Units" min="1" max="10" required onchange="generateAdminUnitInputs()">
+                        <div id="adminUnitNamesContainer"></div>
+                        <button type="submit" class="btn btn-success" style="grid-column:1/-1">➕ Create Subject</button>
+                    </form>
+                    <h3 style="margin-top:25px">📚 All Subjects</h3>
+                    <div id="adminSubjectsList"></div>
+                </div>
+                <div class="admin-section" id="materialsSection">
+                    <h3>➕ Upload Study Material</h3>
+                    <form class="add-form" onsubmit="addMaterial(event)">
+                        <div style="grid-column:1/-1">
+                            <label style="display:block;margin-bottom:5px;font-weight:600;color:#0d1b2a;font-size:0.7rem;text-transform:uppercase">Select Subject</label>
+                            <div class="select-with-add">
+                                <select id="matSubject" required onchange="updateUnitOptions()">
+                                    <option value="">Select Subject</option>
+                                </select>
+                                <button type="button" class="add-btn" onclick="openQuickSubjectModal()">+</button>
+                            </div>
+                        </div>
+                        <div style="grid-column:1/-1">
+                            <label style="display:block;margin-bottom:5px;font-weight:600;color:#0d1b2a;font-size:0.7rem;text-transform:uppercase">Select Unit</label>
+                            <div class="select-with-add">
+                                <select id="matUnit" required>
+                                    <option value="">Select Unit</option>
+                                </select>
+                                <button type="button" class="add-btn" onclick="openQuickUnitModal()">+</button>
+                            </div>
+                        </div>
+                        <select id="matType" required>
+                            <option value="">Select Type</option>
+                            <option value="PDF">📕 PDF Document</option>
+                            <option value="DOC">📘 Word Document</option>
+                            <option value="PPT">📙 PowerPoint</option>
+                            <option value="Notes">📝 Notes</option>
+                            <option value="Question Paper">📄 Question Paper</option>
+                        </select>
+                        <input type="text" id="matTitle" placeholder="Material Title" required>
+                        <div style="grid-column:1/-1">
+                            <label style="display:block;margin-bottom:5px;font-weight:600;color:#0d1b2a;font-size:0.7rem;text-transform:uppercase">Upload File (PDF, DOC, PPT, TXT)</label>
+                            <input type="file" id="matFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" style="padding:12px;border:2px dashed #ccc;border-radius:10px;width:100%;background:white">
+                        </div>
+                        <div style="grid-column:1/-1">
+                            <label style="display:block;margin-bottom:5px;font-weight:600;color:#0d1b2a;font-size:0.7rem;text-transform:uppercase">Or Paste Content (Optional)</label>
+                            <textarea id="matContent" placeholder="Paste study content here..." style="min-height:80px;width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:10px"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success" style="grid-column:1/-1">➕ Upload Material</button>
+                    </form>
+                    <h3 style="margin-top:25px">📄 All Materials</h3>
+                    <div id="adminMaterialsList"></div>
+                </div>
+                <div class="admin-section" id="booksSection">
+                    <h3>➕ Add New Book</h3>
+                    <form class="add-form" onsubmit="addBook(event)">
+                        <input type="text" id="bookTitle" placeholder="Book Title *" required>
+                        <input type="text" id="bookAuthor" placeholder="Author Name *" required>
+                        <input type="text" id="bookPublisher" placeholder="Publisher">
+                        <input type="number" id="bookYear" placeholder="Publication Year" min="1900" max="2025">
+                        <input type="number" id="bookPages" placeholder="Total Pages" min="1">
+                        <input type="text" id="bookISBN" placeholder="ISBN Number">
+                        <input type="text" id="bookEdition" placeholder="Edition">
+                        <select id="bookCourse" required>
+                            <option value="">Select Course *</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BCOM">BCOM</option>
+                            <option value="BBA">BBA</option>
+                            <option value="BA">BA</option>
+                            <option value="MBA">MBA</option>
+                        </select>
+                        <select id="bookType" required>
+                            <option value="">Select Type *</option>
+                            <option value="Textbook">📚 Textbook</option>
+                            <option value="Reference">📖 Reference Book</option>
+                            <option value="Journal">📰 Journal</option>
+                        </select>
+                        <input type="number" id="bookQuantity" placeholder="Quantity *" min="1" value="1" required>
+                        <input type="number" id="bookPrice" placeholder="Price (₹)">
+                        <button type="submit" class="btn btn-success" style="grid-column:1/-1">➕ Add Book</button>
+                    </form>
+                    <h3 style="margin-top:25px">📖 Complete Book Inventory</h3>
+                    <table class="data-table">
+                        <thead><tr><th>ID</th><th>Title</th><th>Author</th><th>Course</th><th>Type</th><th>Qty</th><th>Avail</th><th>Action</th></tr></thead>
+                        <tbody id="adminBooksTable"></tbody>
+                    </table>
+                </div>
+                <div class="admin-section" id="issuesSection">
+                    <h3>📋 Book Issue & Return Management</h3>
+                    <table class="data-table">
+                        <thead><tr><th>ID</th><th>Book</th><th>Student</th><th>Issue Date</th><th>Due Date</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="adminIssuesTable"></tbody>
+                    </table>
+                </div>
+                <div class="admin-section" id="usersSection">
+                    <h3>👥 User Management</h3>
+                    <table class="data-table">
+                        <thead><tr><th>ID</th><th>Name</th><th>ID/Email</th><th>Role</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="adminUsersTable"></tbody>
+                    </table>
+                </div>
+                <div class="admin-section" id="reportsSection">
+                    <h3>📊 Library Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="icon">📚</div><h3 id="rptSubjects">0</h3><p>Subjects</p></div>
+                        <div class="stat-card"><div class="icon">📖</div><h3 id="rptUnits">0</h3><p>Units</p></div>
+                        <div class="stat-card"><div class="icon">📄</div><h3 id="rptMaterials">0</h3><p>Materials</p></div>
+                        <div class="stat-card"><div class="icon">📖</div><h3 id="rptBooks">0</h3><p>Books</p></div>
+                        <div class="stat-card"><div class="icon">📋</div><h3 id="rptIssued">0</h3><p>Issued</p></div>
+                        <div class="stat-card"><div class="icon">👨‍🎓</div><h3 id="rptStudents">0</h3><p>Students</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reader Modal -->
+    <div class="modal" id="readerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="readerTitle">📄 Material</h3>
+                <button class="modal-close" onclick="closeReaderModal()">✕</button>
+            </div>
+            <div class="reader-meta" id="readerMeta"></div>
+            <div class="reader-body">
+                <div class="reader-content" id="readerContent"></div>
+            </div>
+            <div class="reader-actions">
+                <button class="btn btn-success" onclick="downloadCurrentMaterial()">📥 Download</button>
+                <button class="btn btn-orange" onclick="copyMaterialContent()">📋 Copy</button>
+                <button class="btn btn-secondary" onclick="closeReaderModal()">✕ Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Book Detail Modal -->
+    <div class="modal" id="bookDetailModal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3>📖 Book Details</h3>
+                <button class="modal-close" onclick="closeBookDetailModal()">✕</button>
+            </div>
+            <div class="book-detail" id="bookDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- Quick Add Subject Modal -->
+    <div class="modal" id="quickSubjectModal">
+        <div class="modal-content small">
+            <div class="modal-header"><h3>➕ Quick Add Subject</h3><button class="modal-close" onclick="closeQuickSubjectModal()">✕</button></div>
+            <form onsubmit="quickAddSubject(event)" style="padding:20px">
+                <div class="form-group"><label>Subject Name</label><input type="text" id="quickSubName" placeholder="e.g., Database Management System" required></div>
+                <div class="form-group"><label>Course</label>
+                    <select id="quickSubCourse" required>
+                        <option value="">Select Course</option>
+                        <option value="BCA">BCA</option>
+                        <option value="BCOM">BCOM</option>
+                        <option value="BBA">BBA</option>
+                        <option value="BA">BA</option>
+                        <option value="MBA">MBA</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Number of Units</label><input type="number" id="quickSubUnits" placeholder="e.g., 5" min="1" max="10" required onchange="generateQuickUnitInputs()"></div>
+                <div id="quickUnitNamesContainer"></div>
+                <button type="submit" class="btn btn-success" style="width:100%;margin-top:15px">➕ Create Subject</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quick Add Unit Modal -->
+    <div class="modal" id="quickUnitModal">
+        <div class="modal-content small">
+            <div class="modal-header"><h3>➕ Quick Add Unit</h3><button class="modal-close" onclick="closeQuickUnitModal()">✕</button></div>
+            <form onsubmit="quickAddUnit(event)" style="padding:20px">
+                <div class="form-group"><label>Subject</label>
+                    <select id="quickUnitSubject" required>
+                        <option value="">Select Subject</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Unit Name</label><input type="text" id="quickUnitName" placeholder="e.g., Introduction to DBMS" required></div>
+                <button type="submit" class="btn btn-purple" style="width:100%;margin-top:15px">➕ Add Unit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Material Modal -->
+    <div class="modal" id="materialModal">
+        <div class="modal-content small">
+            <div class="modal-header"><h3>➕ Add Study Material</h3><button class="modal-close" onclick="closeMaterialModal()">✕</button></div>
+            <form onsubmit="addMaterialFromModal(event)" style="padding:20px">
+                <input type="hidden" id="modalSubjectId">
+                <input type="hidden" id="modalUnitId">
+                <div class="form-group"><label>Subject</label><input type="text" id="modalSubjectName" disabled></div>
+                <div class="form-group"><label>Unit</label><input type="text" id="modalUnitName" disabled></div>
+                <div class="form-group"><label>Material Type</label>
+                    <select id="modalMatType" required>
+                        <option value="">Select Type</option>
+                        <option value="PDF">📕 PDF</option>
+                        <option value="DOC">📘 DOC</option>
+                        <option value="PPT">📙 PPT</option>
+                        <option value="Notes">📝 Notes</option>
+                        <option value="Question Paper">📄 Question Paper</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Title</label><input type="text" id="modalMatTitle" placeholder="Material Title" required></div>
+                <div class="form-group"><label>Upload File</label><input type="file" id="modalMatFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt"></div>
+                <div class="form-group"><label>Or Paste Content</label><textarea id="modalMatContent" placeholder="Paste content..." style="min-height:60px"></textarea></div>
+                <button type="submit" class="btn btn-success" style="width:100%">➕ Upload</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Unit Modal -->
+    <div class="modal" id="unitModal">
+        <div class="modal-content small">
+            <div class="modal-header"><h3>➕ Add New Unit</h3><button class="modal-close" onclick="closeUnitModal()">✕</button></div>
+            <form onsubmit="addUnitFromModal(event)" style="padding:20px">
+                <input type="hidden" id="modalSubjectIdForUnit">
+                <div class="form-group"><label>Subject</label><input type="text" id="modalSubNameDisplay" disabled></div>
+                <div class="form-group"><label>Unit Name</label><input type="text" id="modalUnitNameInput" placeholder="Unit Name" required></div>
+                <button type="submit" class="btn btn-purple" style="width:100%;margin-top:15px">➕ Add Unit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal" id="forgotModal">
+        <div class="modal-content small">
+            <div class="modal-header"><h3>🔑 Forgot Password</h3><button class="modal-close" onclick="closeForgotModal()">✕</button></div>
+            <form onsubmit="handleForgotPassword(event)" style="padding:20px">
+                <div class="form-group"><label>Account Type</label>
+                    <select id="forgotType" required>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Enter Your ID or Email</label><input type="text" id="forgotId" placeholder="College ID / Teacher ID / Admin ID" required></div>
+                <button type="submit" class="btn btn-primary" style="width:100%">🔍 Find Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Database Keys
+        var DB_KEYS = {
+            USERS: 'pism_library_users',
+            BOOKS: 'pism_library_books',
+            SUBJECTS: 'pism_library_subjects',
+            MATERIALS: 'pism_library_materials',
+            ISSUES: 'pism_library_issues'
+        };
+
+        // Default Data
+        var defaultAdmins = [
+            { id: 1, name: 'Main Admin', collegeId: 'ADMIN001', email: 'admin@pism.edu', course: 'Main Admin', password: 'admin123', role: 'admin', status: 'active' }
+        ];
+
+        var defaultTeachers = [
+            { id: 101, name: 'Dr. Rajesh Kumar', collegeId: 'T001', email: 'rajesh@pism.edu', course: 'Computer Science', password: 'teacher123', role: 'teacher', status: 'active' }
+        ];
+
+        var defaultSubjects = [
+            { id: 1, name: 'C Programming', course: 'BCA', addedBy: 'T001', addedByName: 'Dr. Rajesh Kumar', units: [
+                { id: 1, name: 'Introduction to C', order: 1 },
+                { id: 2, name: 'Data Types and Operators', order: 2 },
+                { id: 3, name: 'Control Statements', order: 3 },
+                { id: 4, name: 'Functions and Arrays', order: 4 },
+                { id: 5, name: 'Pointers and Structures', order: 5 }
+            ]},
+            { id: 2, name: 'Financial Accounting', course: 'BCOM', addedBy: 'ADMIN001', addedByName: 'Main Admin', units: [
+                { id: 1, name: 'Introduction to Accounting', order: 1 },
+                { id: 2, name: 'Journal and Ledger', order: 2 },
+                { id: 3, name: 'Trial Balance', order: 3 }
+            ]}
+        ];
+
+        var defaultMaterials = [
+            { id: 1, subjectId: 1, unitId: 1, title: 'C Programming Complete Notes', type: 'Notes', content: 'INTRODUCTION TO C PROGRAMMING\n\nC is a general-purpose programming language developed by Dennis Ritchie at Bell Laboratories in 1972.\n\nKEY FEATURES:\n1. Simple and Efficient\n2. Portable\n3. Fast Execution\n4. Modular\n5. Rich Library Functions\n\nSTRUCTURE OF A C PROGRAM:\n#include <stdio.h>\n\nint main() {\n    int number;\n    printf("Enter a number: ");\n    scanf("%d", &number);\n    printf("You entered: %d", number);\n    return 0;\n}\n\nBASIC DATA TYPES:\n- int: Integer values\n- float: Floating point numbers\n- double: Double precision\n- char: Character values\n- void: No value\n\nVARIABLES:\nVariables are containers for storing data values.\nSyntax: datatype variable_name = value;\n\nExample:\nint age = 20;\nfloat price = 99.99;\nchar grade = \'A\';\n\nWHY LEARN C?\n1. Foundation for other languages\n2. System programming\n3. Embedded systems\n4. Game development\n5. High performance applications', fileName: 'c_programming_notes.txt', fileData: '', addedBy: 'T001', addedByName: 'Dr. Rajesh Kumar', date: '2024-01-15' },
+            { id: 2, subjectId: 1, unitId: 2, title: 'Data Types and Operators Guide', type: 'Notes', content: 'DATA TYPES AND OPERATORS IN C\n\nPRIMARY DATA TYPES:\n1. int - Integer (2-4 bytes)\n2. float - Single precision (4 bytes)\n3. double - Double precision (8 bytes)\n4. char - Character (1 byte)\n\nARITHMETIC OPERATORS:\n+  Addition\na + b\n-  Subtraction\na - b\n*  Multiplication\na * b\n/  Division\na / b\n%  Modulus (remainder)\na % b\n\nINCREMENT/DECREMENT:\n++x  Pre-increment\nx++  Post-increment\n--x  Pre-decrement\nx--  Post-decrement\n\nRELATIONAL OPERATORS:\n==  Equal to\n!=  Not equal to\n>   Greater than\n<   Less than\n>=  Greater than or equal\n<=  Less than or equal\n\nLOGICAL OPERATORS:\n&&  Logical AND\n||  Logical OR\n!   Logical NOT', fileName: 'data_types_operators.txt', fileData: '', addedBy: 'T001', addedByName: 'Dr. Rajesh Kumar', date: '2024-01-16' },
+            { id: 3, subjectId: 2, unitId: 1, title: 'Introduction to Accounting', type: 'Notes', content: 'INTRODUCTION TO ACCOUNTING\n\nDEFINITION:\nAccounting is the process of recording, classifying, summarizing, and interpreting financial transactions.\n\nOBJECTIVES OF ACCOUNTING:\n1. Record keeping\n2. Financial position ascertainment\n3. Profit/Loss calculation\n4. Providing information to users\n5. Control over assets\n\nBASIC ACCOUNTING EQUATION:\nAssets = Liabilities + Capital\n\nThis equation must always balance!\n\nTYPES OF ACCOUNTS:\n1. Personal Accounts\n   - Natural persons (individual)\n   - Artificial persons (companies)\n   - Representative personal\n\n2. Real Accounts\n   - Cash, Stock, Furniture\n\n3. Nominal Accounts\n   - Salaries, Rent, Commission\n\nRULES OF ACCOUNTING:\nPersonal Account:\n  Debit the receiver\n  Credit the giver\n\nReal Account:\n  Debit what comes in\n  Credit what goes out\n\nNominal Account:\n  Debit all expenses and losses\n  Credit all incomes and gains', fileName: 'accounting_intro.txt', fileData: '', addedBy: 'ADMIN001', addedByName: 'Main Admin', date: '2024-01-14' }
+        ];
+
+        var defaultBooks = [
+            { id: 1, title: 'C Programming: The Complete Reference', author: 'Herbert Schildt', publisher: 'McGraw Hill Education', year: 2017, pages: 1152, isbn: '978-0071829575', edition: '4th Edition', course: 'BCA', type: 'Textbook', quantity: 5, available: 5, status: 'active', price: 899 },
+            { id: 2, title: 'Let Us C', author: 'Yashavant Kanetkar', publisher: 'BPB Publications', year: 2018, pages: 412, isbn: '978-8183331630', edition: '17th Updated Edition', course: 'BCA', type: 'Textbook', quantity: 8, available: 8, status: 'active', price: 350 },
+            { id: 3, title: 'Financial Accounting', author: 'T.S. Reddy', publisher: 'Margham Publications', year: 2020, pages: 678, isbn: '978-9351615746', edition: '2nd Edition', course: 'BCOM', type: 'Textbook', quantity: 6, available: 6, status: 'active', price: 450 },
+            { id: 4, title: 'Principles of Accounting', author: 'M.C. Shukla', publisher: 'S. Chand Publishing', year: 2019, pages: 892, isbn: '978-9352535797', edition: 'Revised Edition', course: 'BCOM', type: 'Textbook', quantity: 4, available: 4, status: 'active', price: 525 },
+            { id: 5, title: 'Marketing Management', author: 'Philip Kotler', publisher: 'Pearson Education', year: 2021, pages: 1024, isbn: '978-0134001760', edition: '15th Global Edition', course: 'BBA', type: 'Reference', quantity: 3, available: 3, status: 'active', price: 1299 },
+            { id: 6, title: 'Data Structures and Algorithms', author: 'Thomas H. Cormen', publisher: 'MIT Press', year: 2022, pages: 1312, isbn: '978-0262046305', edition: '4th Edition', course: 'BCA', type: 'Reference', quantity: 4, available: 4, status: 'active', price: 1499 }
+        ];
+
+        var defaultIssues = [
+            { id: 1, bookId: 1, studentId: 2, studentName: 'Rahul Sharma', bookTitle: 'C Programming: The Complete Reference', issueDate: '2024-01-20', dueDate: '2024-02-03', returnDate: '', status: 'issued' }
+        ];
+
+        // Initialize Database
+        function initDatabase() {
+            if (!localStorage.getItem(DB_KEYS.USERS)) {
+                var combinedUsers = defaultAdmins.concat(defaultTeachers);
+                localStorage.setItem(DB_KEYS.USERS, JSON.stringify(combinedUsers));
+            }
+            if (!localStorage.getItem(DB_KEYS.SUBJECTS)) {
+                localStorage.setItem(DB_KEYS.SUBJECTS, JSON.stringify(defaultSubjects));
+            }
+            if (!localStorage.getItem(DB_KEYS.MATERIALS)) {
+                localStorage.setItem(DB_KEYS.MATERIALS, JSON.stringify(defaultMaterials));
+            }
+            if (!localStorage.getItem(DB_KEYS.BOOKS)) {
+                localStorage.setItem(DB_KEYS.BOOKS, JSON.stringify(defaultBooks));
+            }
+            if (!localStorage.getItem(DB_KEYS.ISSUES)) {
+                localStorage.setItem(DB_KEYS.ISSUES, JSON.stringify(defaultIssues));
+            }
+        }
+
+        // Get Data
+        function getUsers() {
+            var data = localStorage.getItem(DB_KEYS.USERS);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function getSubjects() {
+            var data = localStorage.getItem(DB_KEYS.SUBJECTS);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function getMaterials() {
+            var data = localStorage.getItem(DB_KEYS.MATERIALS);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function getBooks() {
+            var data = localStorage.getItem(DB_KEYS.BOOKS);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function getIssues() {
+            var data = localStorage.getItem(DB_KEYS.ISSUES);
+            return data ? JSON.parse(data) : [];
+        }
+
+        // Save Data
+        function saveUsers(users) {
+            localStorage.setItem(DB_KEYS.USERS, JSON.stringify(users));
+        }
+
+        function saveSubjects(subjects) {
+            localStorage.setItem(DB_KEYS.SUBJECTS, JSON.stringify(subjects));
+        }
+
+        function saveMaterials(materials) {
+            localStorage.setItem(DB_KEYS.MATERIALS, JSON.stringify(materials));
+        }
+
+        function saveBooks(books) {
+            localStorage.setItem(DB_KEYS.BOOKS, JSON.stringify(books));
+        }
+
+        function saveIssues(issues) {
+            localStorage.setItem(DB_KEYS.ISSUES, JSON.stringify(issues));
+        }
+
+        var currentUser = null;
+        var currentMaterial = null;
+
+        // Password Toggle Function
+        function togglePassword(inputId) {
+            var input = document.getElementById(inputId);
+            if (input) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                } else {
+                    input.type = 'password';
+                }
+            }
+        }
+
+        // Login/Register Functions
+        function showLogin(type) {
+            hideAllSections();
+            document.getElementById('loginSection').style.display = 'flex';
+            document.getElementById('registerSection').style.display = 'none';
+            
+            var tabs = ['student', 'teacher', 'admin'];
+            for (var i = 0; i < tabs.length; i++) {
+                var t = tabs[i];
+                document.getElementById(t + 'Tab').classList.remove('active', 'admin-active', 'teacher-active');
+                var form = document.getElementById(t + 'LoginForm');
+                if (form) form.style.display = 'none';
+            }
+            
+            var tabClass = type === 'admin' ? 'admin-active' : type === 'teacher' ? 'teacher-active' : 'active';
+            document.getElementById(type + 'Tab').classList.add(tabClass);
+            var loginForm = document.getElementById(type + 'LoginForm');
+            if (loginForm) loginForm.style.display = 'block';
+        }
+
+        function showRegister(type) {
+            hideAllSections();
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('registerSection').style.display = 'flex';
+            
+            var tabs = ['student', 'teacher', 'admin'];
+            for (var i = 0; i < tabs.length; i++) {
+                var t = tabs[i];
+                document.getElementById(t + 'RegTab').classList.remove('active', 'admin-active', 'teacher-active');
+                var form = document.getElementById(t + 'RegForm');
+                if (form) form.style.display = 'none';
+            }
+            
+            var tabClass = type === 'admin' ? 'admin-active' : type === 'teacher' ? 'teacher-active' : 'active';
+            document.getElementById(type + 'RegTab').classList.add(tabClass);
+            var regForm = document.getElementById(type + 'RegForm');
+            if (regForm) regForm.style.display = 'block';
+        }
+
+        function hideAllSections() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('registerSection').style.display = 'none';
+            var sections = ['studentDashboard', 'teacherDashboard', 'adminDashboard'];
+            for (var i = 0; i < sections.length; i++) {
+                document.getElementById(sections[i]).classList.remove('active');
+            }
+        }
+
+        function handleLogin(e, type) {
+            e.preventDefault();
+            var id, pass;
+            if (type === 'admin') {
+                id = document.getElementById('adminLoginId').value.trim();
+                pass = document.getElementById('adminLoginPass').value;
+            } else if (type === 'teacher') {
+                id = document.getElementById('teacherLoginId').value.trim();
+                pass = document.getElementById('teacherLoginPass').value;
+            } else {
+                id = document.getElementById('studentLoginId').value.trim();
+                pass = document.getElementById('studentLoginPass').value;
+            }
+
+            var users = getUsers();
+            var user = null;
+            for (var i = 0; i < users.length; i++) {
+                var u = users[i];
+                if ((u.collegeId.toLowerCase() === id.toLowerCase() || u.email.toLowerCase() === id.toLowerCase()) && u.password === pass && u.role === type) {
+                    user = u;
+                    break;
+                }
+            }
+
+            if (user) {
+                if (user.status === 'inactive') {
+                    showToast('Account is deactivated.', 'error');
+                    return;
+                }
+                currentUser = user;
+                showToast('Welcome ' + user.name + '!', 'success');
+                if (type === 'admin') showAdminDashboard();
+                else if (type === 'teacher') showTeacherDashboard();
+                else showStudentDashboard();
+            } else {
+                showToast('Invalid credentials!', 'error');
+            }
+        }
+
+        function handleRegister(e, type) {
+            e.preventDefault();
+            var name = document.getElementById(type + 'RegName').value.trim();
+            var collegeId = document.getElementById(type + 'RegCollegeId').value.trim().toUpperCase();
+            var email = document.getElementById(type + 'RegEmail').value.trim();
+            var course;
+            if (type === 'admin') course = document.getElementById('adminRegDesig').value;
+            else if (type === 'teacher') course = document.getElementById('teacherRegDept').value;
+            else course = document.getElementById('studentRegCourse').value;
+            var password = document.getElementById(type + 'RegPass').value;
+
+            var users = getUsers();
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].collegeId.toLowerCase() === collegeId.toLowerCase()) {
+                    showToast('ID already registered!', 'error');
+                    return;
+                }
+            }
+
+            users.push({
+                id: users.length + 1,
+                name: name,
+                collegeId: collegeId,
+                email: email,
+                course: course,
+                password: password,
+                role: type,
+                status: 'active'
+            });
+            saveUsers(users);
+            showToast(type + ' registered!', 'success');
+            e.target.reset();
+            setTimeout(function() {
+                showLogin(type);
+            }, 1500);
+        }
+
+        function logout() {
+            currentUser = null;
+            showLogin('student');
+            document.getElementById('navButtons').innerHTML = 
+                '<button class="btn btn-secondary" onclick="showLogin(\'student\')">👨‍🎓 Student</button>' +
+                '<button class="btn btn-purple" onclick="showLogin(\'teacher\')">👨‍🏫 Teacher</button>' +
+                '<button class="btn btn-danger" onclick="showLogin(\'admin\')">🔐 Admin</button>' +
+                '<button class="btn btn-primary" onclick="showRegister()">📝 Register</button>';
+            showToast('Logged out!', 'success');
+        }
+
+        function showForgotPassword() {
+            document.getElementById('forgotModal').classList.add('active');
+        }
+
+        function closeForgotModal() {
+            document.getElementById('forgotModal').classList.remove('active');
+        }
+
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            var id = document.getElementById('forgotId').value.trim();
+            var type = document.getElementById('forgotType').value;
+            var users = getUsers();
+            var user = null;
+            for (var i = 0; i < users.length; i++) {
+                var u = users[i];
+                if ((u.collegeId.toLowerCase() === id.toLowerCase() || u.email.toLowerCase() === id.toLowerCase()) && u.role === type) {
+                    user = u;
+                    break;
+                }
+            }
+            if (user) {
+                var newPass = type === 'admin' ? 'admin123' : type === 'teacher' ? 'teacher123' : 'student123';
+                user.password = newPass;
+                saveUsers(users);
+                showToast('Password reset! New: ' + newPass, 'success');
+                closeForgotModal();
+            } else {
+                showToast('Account not found!', 'error');
+            }
+        }
+
+        // Student Dashboard
+        function showStudentDashboard() {
+            hideAllSections();
+            document.getElementById('studentDashboard').classList.add('active');
+            document.getElementById('studentName').textContent = currentUser.name;
+            document.getElementById('navButtons').innerHTML = 
+                '<div class="user-info"><div class="user-avatar">' + currentUser.name.charAt(0) + '</div><span>' + currentUser.name + '</span></div>' +
+                '<button class="btn btn-danger" onclick="logout()">Logout</button>';
+            updateStudentStats();
+            renderStudentSubjects();
+            renderStudentBooks();
+            renderMyIssues();
+        }
+
+        function updateStudentStats() {
+            var materials = getMaterials();
+            var subjects = getSubjects();
+            var issues = getIssues();
+            var issuedCount = 0;
+            for (var i = 0; i < issues.length; i++) {
+                if (issues[i].studentId === currentUser.id && issues[i].status === 'issued') {
+                    issuedCount++;
+                }
+            }
+            document.getElementById('stdSubjects').textContent = subjects.length;
+            document.getElementById('stdMaterials').textContent = materials.length;
+            document.getElementById('stdBooks').textContent = getBooks().length;
+            document.getElementById('stdIssued').textContent = issuedCount;
+        }
+
+        function showStudentTab(tab) {
+            var tabs = ['stdMatTab', 'stdBooksTab', 'stdIssuesTab'];
+            for (var i = 0; i < tabs.length; i++) {
+                document.getElementById(tabs[i]).classList.remove('active');
+            }
+            document.getElementById('stdMaterialsContent').style.display = 'none';
+            document.getElementById('stdBooksContent').style.display = 'none';
+            document.getElementById('stdIssuesContent').style.display = 'none';
+            
+            if (tab === 'materials') {
+                document.getElementById('stdMatTab').classList.add('active');
+                document.getElementById('stdMaterialsContent').style.display = 'block';
+            } else if (tab === 'books') {
+                document.getElementById('stdBooksTab').classList.add('active');
+                document.getElementById('stdBooksContent').style.display = 'block';
+            } else {
+                document.getElementById('stdIssuesTab').classList.add('active');
+                document.getElementById('stdIssuesContent').style.display = 'block';
+                renderMyIssues();
+            }
+        }
+
+        function renderStudentSubjects() {
+            var course = document.getElementById('stdMatCourseFilter').value;
+            var search = document.getElementById('stdSearchMat').value.toLowerCase();
+            var subjects = getSubjects();
+            var filteredSubjects = [];
+            
+            for (var i = 0; i < subjects.length; i++) {
+                var s = subjects[i];
+                var matchCourse = !course || s.course === course;
+                var matchSearch = s.name.toLowerCase().includes(search);
+                if (matchCourse && matchSearch) {
+                    filteredSubjects.push(s);
+                }
+            }
+
+            var container = document.getElementById('subjectsList');
+            if (filteredSubjects.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:#666;">No subjects found</p>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < filteredSubjects.length; i++) {
+                var sub = filteredSubjects[i];
+                html += '<div class="subject-card"><div class="subject-header"><h4>📚 ' + sub.name + ' <span class="subject-badge">' + sub.course + '</span></h4><span style="color:#666;font-size:0.75rem;">' + sub.units.length + ' Units</span></div>';
+                
+                for (var j = 0; j < sub.units.length; j++) {
+                    var unit = sub.units[j];
+                    var materials = getMaterials();
+                    var unitMaterials = [];
+                    for (var k = 0; k < materials.length; k++) {
+                        if (materials[k].subjectId === sub.id && materials[k].unitId === unit.id) {
+                            unitMaterials.push(materials[k]);
+                        }
+                    }
+                    
+                    html += '<div class="unit-item"><div class="unit-header"><h5>📖 Unit ' + unit.order + ': ' + unit.name + '</h5></div>';
+                    
+                    if (unitMaterials.length === 0) {
+                        html += '<p style="color:#999;font-size:0.8rem;">No materials yet</p>';
+                    } else {
+                        html += '<div class="materials-grid">';
+                        for (var k = 0; k < unitMaterials.length; k++) {
+                            var m = unitMaterials[k];
+                            html += '<div class="material-mini" onclick="openReader(' + m.id + ')"><div class="icon">' + getFileIcon(m.type) + '</div><span class="type-badge">' + m.type + '</span><div class="name">' + m.title + '</div><div class="actions" onclick="event.stopPropagation()"><button class="btn btn-sm btn-primary" onclick="openReader(' + m.id + ')">📖 Read</button><button class="btn btn-sm btn-success" onclick="downloadMaterialDirect(' + m.id + ')">📥 Download</button></div></div>';
+                        }
+                        html += '</div>';
+                    }
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        function renderStudentBooks() {
+            var course = document.getElementById('stdBookCourseFilter').value;
+            var search = document.getElementById('stdSearchBooks').value.toLowerCase();
+            var books = getBooks();
+            var filteredBooks = [];
+            
+            for (var i = 0; i < books.length; i++) {
+                var b = books[i];
+                var matchCourse = !course || b.course === course;
+                var matchSearch = b.title.toLowerCase().includes(search) || b.author.toLowerCase().includes(search);
+                if (matchCourse && matchSearch && b.status === 'active') {
+                    filteredBooks.push(b);
+                }
+            }
+
+            var grid = document.getElementById('studentBooksGrid');
+            if (filteredBooks.length === 0) {
+                grid.innerHTML = '<p style="text-align:center;color:#666;grid-column:1/-1;">No books found</p>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < filteredBooks.length; i++) {
+                var b = filteredBooks[i];
+                var btnClass = b.available > 0 ? 'btn-success' : 'btn-secondary';
+                var btnText = b.available > 0 ? '📥 Issue' : 'Not Available';
+                var btnDisabled = b.available > 0 ? '' : 'disabled';
+                html += '<div class="card"><div class="card-cover"><span class="card-badge">' + b.type + '</span>📖</div><div class="card-body"><h3>' + b.title + '</h3><p class="meta">✍️ ' + b.author + '</p><p class="meta">🏢 ' + (b.publisher || 'N/A') + ' | ' + (b.year || 'N/A') + '</p><p class="meta">📖 ' + (b.pages || 'N/A') + ' pages | 📋 ' + (b.edition || 'N/A') + '</p><p class="meta">💰 ₹' + (b.price || 'N/A') + '</p><div class="card-meta"><span class="card-course">' + b.course + '</span><span class="card-status ' + (b.available > 0 ? 'available' : 'issued') + '">' + b.available + '/' + b.quantity + ' Available</span></div></div><div class="card-actions"><button class="btn btn-primary" onclick="openBookDetail(' + b.id + ')">📖 Details</button><button class="btn ' + btnClass + '" onclick="issueBook(' + b.id + ')" ' + btnDisabled + '>' + btnText + '</button></div></div>';
+            }
+            grid.innerHTML = html;
+        }
+
+        function renderMyIssues() {
+            var issues = getIssues();
+            var myIssues = [];
+            for (var i = 0; i < issues.length; i++) {
+                if (issues[i].studentId === currentUser.id) {
+                    myIssues.push(issues[i]);
+                }
+            }
+            
+            var container = document.getElementById('myIssuesList');
+            if (myIssues.length === 0) {
+                container.innerHTML = '<div class="subject-card"><p style="text-align:center;color:#666;">No books issued yet</p></div>';
+                return;
+            }
+
+            var html = '';
+            var today = new Date();
+            for (var i = 0; i < myIssues.length; i++) {
+                var issue = myIssues[i];
+                var dueDate = new Date(issue.dueDate);
+                var isOverdue = dueDate < today && issue.status === 'issued';
+                
+                html += '<div class="subject-card"><div class="subject-header"><h4>📖 ' + issue.bookTitle + '</h4><span class="status-badge ' + issue.status + '">' + issue.status.toUpperCase() + '</span></div><p class="meta">Issue Date: ' + issue.issueDate + '</p><p class="meta" style="color:' + (isOverdue ? '#e74c3c' : '#333') + ';">Due Date: ' + issue.dueDate + (isOverdue ? ' ⚠️ OVERDUE' : '') + '</p>' + (issue.returnDate ? '<p class="meta">Returned: ' + issue.returnDate + '</p>' : '') + (issue.status === 'issued' ? '<button class="btn btn-success" onclick="returnBook(' + issue.id + ')" style="margin-top:10px">📤 Return Book</button>' : '') + '</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        // Reader Functions
+        function openReader(materialId) {
+            var materials = getMaterials();
+            var material = null;
+            for (var i = 0; i < materials.length; i++) {
+                if (materials[i].id === materialId) {
+                    material = materials[i];
+                    break;
+                }
+            }
+            if (!material) return;
+
+            var subjects = getSubjects();
+            var subject = null;
+            for (var i = 0; i < subjects.length; i++) {
+                if (subjects[i].id === material.subjectId) {
+                    subject = subjects[i];
+                    break;
+                }
+            }
+            
+            var unit = null;
+            if (subject) {
+                for (var i = 0; i < subject.units.length; i++) {
+                    if (subject.units[i].id === material.unitId) {
+                        unit = subject.units[i];
+                        break;
+                    }
+                }
+            }
+
+            currentMaterial = material;
+            document.getElementById('readerTitle').textContent = getFileIcon(material.type) + ' ' + material.title;
+            document.getElementById('readerMeta').innerHTML = '<span>📚 ' + (subject ? subject.name : 'N/A') + '</span><span>📖 ' + (unit ? 'Unit ' + unit.order + ': ' + unit.name : 'N/A') + '</span><span>' + material.type + '</span><span>📅 ' + material.date + '</span>';
+
+            var content = document.getElementById('readerContent');
+            if (material.fileData) {
+                content.innerHTML = '<iframe src="' + material.fileData + '" style="width:100%;height:700px;border:none;"></iframe>';
+            } else if (material.content) {
+                content.innerHTML = '<pre>' + material.content + '</pre>';
+            } else {
+                content.innerHTML = '<pre style="padding:30px;text-align:center;color:#999;">No content available to display.</pre>';
+            }
+
+            document.getElementById('readerModal').classList.add('active');
+        }
+
+        function closeReaderModal() {
+            document.getElementById('readerModal').classList.remove('active');
+            currentMaterial = null;
+        }
+
+        function downloadCurrentMaterial() {
+            if (!currentMaterial) return;
+            
+            if (currentMaterial.fileData) {
+                var link = document.createElement('a');
+                link.href = currentMaterial.fileData;
+                link.download = currentMaterial.fileName || 'material.pdf';
+                link.click();
+                showToast('Downloading: ' + currentMaterial.fileName, 'success');
+            } else if (currentMaterial.content) {
+                var blob = new Blob([currentMaterial.content], { type: 'text/plain' });
+                var url = URL.createObjectURL(blob);
+                var link = document.createElement('a');
+                link.href = url;
+                link.download = (currentMaterial.fileName || currentMaterial.title) + '.txt';
+                link.click();
+                URL.revokeObjectURL(url);
+                showToast('Downloaded: ' + currentMaterial.title, 'success');
+            } else {
+                showToast('No file to download', 'error');
+            }
+        }
+
+        function downloadMaterialDirect(materialId) {
+            var materials = getMaterials();
+            var material = null;
+            for (var i = 0; i < materials.length; i++) {
+                if (materials[i].id === materialId) {
+                    material = materials[i];
+                    break;
+                }
+            }
+            if (!material) return;
+            
+            if (material.fileData) {
+                var link = document.createElement('a');
+                link.href = material.fileData;
+                link.download = material.fileName || 'material.pdf';
+                link.click();
+                showToast('Downloading: ' + material.fileName, 'success');
+            } else if (material.content) {
+                var blob = new Blob([material.content], { type: 'text/plain' });
+                var url = URL.createObjectURL(blob);
+                var link = document.createElement('a');
+                link.href = url;
+                link.download = (material.fileName || material.title) + '.txt';
+                link.click();
+                URL.revokeObjectURL(url);
+                showToast('Downloaded: ' + material.title, 'success');
+            } else {
+                showToast('No file to download', 'error');
+            }
+        }
+
+        function copyMaterialContent() {
+            if (!currentMaterial || !currentMaterial.content) {
+                showToast('No content to copy', 'error');
+                return;
+            }
+            navigator.clipboard.writeText(currentMaterial.content);
+            showToast('Content copied!', 'success');
+        }
+
+        function openBookDetail(bookId) {
+            var books = getBooks();
+            var book = null;
+            for (var i = 0; i < books.length; i++) {
+                if (books[i].id === bookId) {
+                    book = books[i];
+                    break;
+                }
+            }
+            if (!book) return;
+
+            var issues = getIssues();
+            var issuedCount = 0;
+            for (var i = 0; i < issues.length; i++) {
+                if (issues[i].bookId === bookId && issues[i].status === 'issued') {
+                    issuedCount++;
+                }
+            }
+            
+            var html = '<div class="book-detail-cover"><span class="badge">' + book.type + '</span>📖</div><div class="book-detail-info"><h2>' + book.title + '</h2><p class="author">✍️ ' + book.author + '</p><div class="book-detail-row"><span class="label">Publisher:</span><span class="value">' + (book.publisher || 'N/A') + '</span></div><div class="book-detail-row"><span class="label">Year:</span><span class="value">' + (book.year || 'N/A') + '</span></div><div class="book-detail-row"><span class="label">Pages:</span><span class="value">' + (book.pages || 'N/A') + ' pages</span></div><div class="book-detail-row"><span class="label">ISBN:</span><span class="value">' + (book.isbn || 'N/A') + '</span></div><div class="book-detail-row"><span class="label">Edition:</span><span class="value">' + (book.edition || 'N/A') + '</span></div><div class="book-detail-row"><span class="label">Course:</span><span class="value">' + book.course + '</span></div><div class="book-detail-row"><span class="label">Type:</span><span class="value">' + book.type + '</span></div><div class="book-detail-row"><span class="label">Price:</span><span class="value">₹' + (book.price || 'N/A') + '</span></div><div class="book-detail-row"><span class="label">Quantity:</span><span class="value">' + book.quantity + ' copies</span></div><div class="book-detail-row"><span class="label">Available:</span><span class="value" style="color:' + (book.available > 0 ? '#2ecc71' : '#e74c3c') + ';">' + book.available + ' copies</span></div><div class="book-detail-row"><span class="label">Issued:</span><span class="value">' + issuedCount + ' copies</span></div><div class="book-detail-actions">' + (book.available > 0 ? '<button class="btn btn-success" onclick="issueBook(' + book.id + ')">📥 Issue Book</button>' : '<button class="btn btn-secondary" disabled>Not Available</button>') + '<button class="btn btn-secondary" onclick="closeBookDetailModal()">✕ Close</button></div></div>';
+
+            document.getElementById('bookDetailContent').innerHTML = html;
+            document.getElementById('bookDetailModal').classList.add('active');
+        }
+
+        function closeBookDetailModal() {
+            document.getElementById('bookDetailModal').classList.remove('active');
+        }
+
+        function issueBook(bookId) {
+            var books = getBooks();
+            var book = null;
+            for (var i = 0; i < books.length; i++) {
+                if (books[i].id === bookId) {
+                    book = books[i];
+                    break;
+                }
+            }
+            if (!book || book.available <= 0) {
+                showToast('Book not available!', 'error');
+                return;
+            }
+
+            var issues = getIssues();
+            var hasActiveIssue = false;
+            for (var i = 0; i < issues.length; i++) {
+                if (issues[i].studentId === currentUser.id && issues[i].status === 'issued') {
+                    hasActiveIssue = true;
+                    break;
+                }
+            }
+            if (hasActiveIssue) {
+                showToast('Return your current book first!', 'error');
+                return;
+            }
+
+            var issueDate = new Date();
+            var dueDate = new Date(issueDate.getTime() + 14 * 24 * 60 * 60 * 1000);
+
+            issues.push({
+                id: issues.length + 1,
+                bookId: book.id,
+                studentId: currentUser.id,
+                studentName: currentUser.name,
+                bookTitle: book.title,
+                issueDate: issueDate.toISOString().split('T')[0],
+                dueDate: dueDate.toISOString().split('T')[0],
+                returnDate: '',
+                status: 'issued'
+            });
+            book.available--;
+            saveIssues(issues);
+            saveBooks(books);
+            showToast('Book "' + book.title + '" issued! Due: ' + dueDate.toISOString().split('T')[0], 'success');
+            renderStudentBooks();
+            renderMyIssues();
+            updateStudentStats();
+            closeBookDetailModal();
+        }
+
+        function returnBook(issueId) {
+            var issues = getIssues();
+            var issue = null;
+            for (var i = 0; i < issues.length; i++) {
+                if (issues[i].id === issueId) {
+                    issue = issues[i];
+                    break;
+                }
+            }
+            if (!issue) return;
+
+            issue.status = 'returned';
+            issue.returnDate = new Date().toISOString().split('T')[0];
+
+            var books = getBooks();
+            for (var i = 0; i < books.length; i++) {
+                if (books[i].id === issue.bookId) {
+                    books[i].available++;
+                    break;
+                }
+            }
+            saveIssues(issues);
+            saveBooks(books);
+            showToast('Book returned successfully!', 'success');
+            renderMyIssues();
+            updateStudentStats();
+        }
+
+        // Teacher Dashboard
+        function showTeacherDashboard() {
+            hideAllSections();
+            document.getElementById('teacherDashboard').classList.add('active');
+            document.getElementById('teacherName').textContent = currentUser.name;
+            document.getElementById('navButtons').innerHTML = 
+                '<div class="user-info" style="background:rgba(155,89,182,0.3)"><div class="user-avatar" style="background:#9b59b6">' + currentUser.name.charAt(0) + '</div><span>' + currentUser.name + '</span></div>' +
+                '<button class="btn btn-danger" onclick="logout()">Logout</button>';
+            updateTeacherStats();
+            renderTeacherSubjects();
+        }
+
+        function updateTeacherStats() {
+            var subjects = getSubjects();
+            var mySubjects = [];
+            for (var i = 0; i < subjects.length; i++) {
+                if (subjects[i].addedBy === currentUser.collegeId) {
+                    mySubjects.push(subjects[i]);
+                }
+            }
+            
+            var materials = getMaterials();
+            var myMaterials = [];
+            for (var i = 0; i < materials.length; i++) {
+                for (var j = 0; j < mySubjects.length; j++) {
+                    if (materials[i].subjectId === mySubjects[j].id) {
+                        myMaterials.push(materials[i]);
+                        break;
+                    }
+                }
+            }
+            
+            document.getElementById('tchSubjects').textContent = mySubjects.length;
+            document.getElementById('tchMaterials').textContent = myMaterials.length;
+        }
+
+        function showTeacherTab(tab) {
+            var tabs = ['tchSubTab', 'tchAddSubTab'];
+            for (var i = 0; i < tabs.length; i++) {
+                document.getElementById(tabs[i]).classList.remove('active');
+            }
+            document.getElementById('tchSubjectsContent').style.display = 'none';
+            document.getElementById('tchAddSubjectContent').style.display = 'none';
+            
+            if (tab === 'subjects') {
+                document.getElementById('tchSubTab').classList.add('active');
+                document.getElementById('tchSubjectsContent').style.display = 'block';
+                renderTeacherSubjects();
+            } else {
+                document.getElementById('tchAddSubTab').classList.add('active');
+                document.getElementById('tchAddSubjectContent').style.display = 'block';
+            }
+        }
+
+        function generateUnitInputs() {
+            var count = parseInt(document.getElementById('subUnitCount').value) || 0;
+            var container = document.getElementById('unitNamesContainer');
+            var html = '';
+            for (var i = 1; i <= count; i++) {
+                html += '<input type="text" id="unitName' + i + '" placeholder="Unit ' + i + ' Name" required>';
+            }
+            container.innerHTML = html;
+        }
+
+        function generateAdminUnitInputs() {
+            var count = parseInt(document.getElementById('adminSubUnitCount').value) || 0;
+            var container = document.getElementById('adminUnitNamesContainer');
+            var html = '';
+            for (var i = 1; i <= count; i++) {
+                html += '<input type="text" id="adminUnitName' + i + '" placeholder="Unit ' + i + ' Name" required>';
+            }
+            container.innerHTML = html;
+        }
+
+        function createSubjectWithUnits(e, by) {
+            e.preventDefault();
+            var name, course, unitCount;
+            if (by === 'admin') {
+                name = document.getElementById('adminSubName').value.trim();
+                course = document.getElementById('adminSubCourse').value;
+                unitCount = parseInt(document.getElementById('adminSubUnitCount').value);
+            } else {
+                name = document.getElementById('subName').value.trim();
+                course = document.getElementById('subCourse').value;
+                unitCount = parseInt(document.getElementById('subUnitCount').value);
+            }
+
+            var subjects = getSubjects();
+            var units = [];
+            for (var i = 1; i <= unitCount; i++) {
+                var input = by === 'admin' ? document.getElementById('adminUnitName' + i) : document.getElementById('unitName' + i);
+                var unitName = input ? input.value.trim() : 'Unit ' + i;
+                units.push({ id: Date.now() + i, name: unitName, order: i });
+            }
+
+            subjects.push({
+                id: Date.now(),
+                name: name,
+                course: course,
+                addedBy: currentUser.collegeId,
+                addedByName: currentUser.name,
+                units: units
+            });
+            saveSubjects(subjects);
+            showToast('Subject "' + name + '" with ' + unitCount + ' units created!', 'success');
+            e.target.reset();
+            document.getElementById('unitNamesContainer').innerHTML = '';
+            document.getElementById('adminUnitNamesContainer').innerHTML = '';
+
+            if (by === 'teacher') {
+                updateTeacherStats();
+                renderTeacherSubjects();
+            } else {
+                renderAdminSubjects();
+                updateAdminReports();
+                updateSubjectOptions();
+            }
+        }
+
+        function renderTeacherSubjects() {
+            var subjects = getSubjects();
+            var mySubjects = [];
+            for (var i = 0; i < subjects.length; i++) {
+                if (subjects[i].addedBy === currentUser.collegeId) {
+                    mySubjects.push(subjects[i]);
+                }
+            }
+            
+            var container = document.getElementById('tchSubjectsContent');
+            if (mySubjects.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:#666;">No subjects created yet.</p>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < mySubjects.length; i++) {
+                var sub = mySubjects[i];
+                html += '<div class="subject-card"><div class="subject-header"><h4>📚 ' + sub.name + ' <span class="subject-badge">' + sub.course + '</span></h4><div><button class="btn btn-sm btn-purple" onclick="openUnitModal(' + sub.id + ',\'' + sub.name.replace(/'/g, "\\'") + '\')">➕ Add Unit</button></div></div>';
+                
+                for (var j = 0; j < sub.units.length; j++) {
+                    var unit = sub.units[j];
+                    var materials = getMaterials();
+                    var unitMaterials = [];
+                    for (var k = 0; k < materials.length; k++) {
+                        if (materials[k].subjectId === sub.id && materials[k].unitId === unit.id) {
+                            unitMaterials.push(materials[k]);
+                        }
+                    }
+                    
+                    html += '<div class="unit-item"><div class="unit-header"><h5>📖 Unit ' + unit.order + ': ' + unit.name + '</h5><div><button class="btn btn-xs btn-success" onclick="openMaterialModal(' + sub.id + ',\'' + sub.name.replace(/'/g, "\\'") + '\',' + unit.id + ',\'Unit ' + unit.order + ': ' + unit.name.replace(/'/g, "\\'") + '\')">➕ Material</button></div></div>';
+                    
+                    if (unitMaterials.length > 0) {
+                        html += '<div class="materials-grid">';
+                        for (var k = 0; k < unitMaterials.length; k++) {
+                            var m = unitMaterials[k];
+                            html += '<div class="material-mini"><div class="icon">' + getFileIcon(m.type) + '</div><span class="type-badge">' + m.type + '</span><div class="name">' + m.title + '</div><div class="actions"><button class="btn btn-xs btn-danger" onclick="deleteMaterial(' + m.id + ')">🗑️</button></div></div>';
+                        }
+                        html += '</div>';
+                    }
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        // Admin Dashboard
+        function showAdminDashboard() {
+            hideAllSections();
+            document.getElementById('adminDashboard').classList.add('active');
+            document.getElementById('navButtons').innerHTML = 
+                '<div class="user-info" style="background:rgba(231,76,60,0.3)"><div class="user-avatar" style="background:#e74c3c">🛡️</div><span>' + currentUser.name + '</span></div>' +
+                '<button class="btn btn-danger" onclick="logout()">Logout</button>';
+            renderAdminSubjects();
+            renderAdminMaterials();
+            renderAdminBooks();
+            renderAdminIssues();
+            renderAdminUsers();
+            updateAdminReports();
+            updateSubjectOptions();
+        }
+
+        function showAdminTab(tab, e) {
+            if (e) e.preventDefault();
+            var tabs = document.querySelectorAll('.admin-tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            var sections = document.querySelectorAll('.admin-section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].classList.remove('active');
+            }
+            if (event && event.target) event.target.classList.add('active');
+            document.getElementById(tab + 'Section').classList.add('active');
+            if (tab === 'materials') updateSubjectOptions();
+        }
+
+        function renderAdminSubjects() {
+            var subjects = getSubjects();
+            var container = document.getElementById('adminSubjectsList');
+            if (subjects.length === 0) {
+                container.innerHTML = '<p style="color:#666;">No subjects created yet</p>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < subjects.length; i++) {
+                var sub = subjects[i];
+                var unitNames = [];
+                for (var j = 0; j < sub.units.length; j++) {
+                    unitNames.push(sub.units[j].name);
+                }
+                html += '<div class="subject-card"><div class="subject-header"><h4>📚 ' + sub.name + ' <span class="subject-badge">' + sub.course + '</span></h4><div><span style="color:#666;font-size:0.7rem;margin-right:10px">By: ' + sub.addedByName + '</span><button class="btn btn-xs btn-danger" onclick="deleteSubject(' + sub.id + ')">🗑️</button></div></div><div class="unit-item" style="background:#fff"><p style="color:#666;font-size:0.8rem"><strong>Units:</strong> ' + unitNames.join(', ') + '</p></div></div>';
+            }
+            container.innerHTML = html;
+        }
+
+        function deleteSubject(id) {
+            if (confirm('Delete this subject and all its materials?')) {
+                var subjects = getSubjects();
+                var newSubjects = [];
+                for (var i = 0; i < subjects.length; i++) {
+                    if (subjects[i].id !== id) {
+                        newSubjects.push(subjects[i]);
+                    }
+                }
+                saveSubjects(newSubjects);
+                
+                var materials = getMaterials();
+                var newMaterials = [];
+                for (var i = 0; i < materials.length; i++) {
+                    if (materials[i].subjectId !== id) {
+                        newMaterials.push(materials[i]);
+                    }
+                }
+                saveMaterials(newMaterials);
+                
+                renderAdminSubjects();
+                renderAdminMaterials();
+                updateAdminReports();
+                updateSubjectOptions();
+                showToast('Subject deleted!', 'success');
+            }
+        }
+
+        function renderAdminMaterials() {
+            var materials = getMaterials();
+            var container = document.getElementById('adminMaterialsList');
+            if (materials.length === 0) {
+                container.innerHTML = '<p style="color:#666;">No materials uploaded yet</p>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < materials.length; i++) {
+                var m = materials[i];
+                var subjects = getSubjects();
+                var subject = null;
+                for (var j = 0; j < subjects.length; j++) {
+                    if (subjects[j].id === m.subjectId) {
+                        subject = subjects[j];
+                        break;
+                    }
+                }
+                
+                var unit = null;
+                if (subject) {
+                    for (var j = 0; j < subject.units.length; j++) {
+                        if (subject.units[j].id === m.unitId) {
+                            unit = subject.units[j];
+                            break;
+                        }
+                    }
+                }
+                
+                html += '<div class="material-mini" style="display:inline-block;width:calc(33% - 10px);margin:5px"><div class="icon" style="font-size:2rem">' + getFileIcon(m.type) + '</div><span class="type-badge">' + m.type + '</span><div class="name">' + m.title + '</div><div style="font-size:0.7rem;color:#666">' + (subject ? subject.name + ' - Unit ' + (unit ? unit.order : 'N/A') : 'N/A') + '</div><div style="font-size:0.65rem;color:#999">' + (m.fileName || 'No file') + '</div><div class="actions"><button class="btn btn-xs btn-danger" onclick="deleteMaterial(' + m.id + ')">🗑️</button></div></div>';
+            }
+            container.innerHTML = html;
+        }
+
+        function updateSubjectOptions() {
+            var subjects = getSubjects();
+            var select = document.getElementById('matSubject');
+            var quickSelect = document.getElementById('quickUnitSubject');
+            var html = '<option value="">Select Subject</option>';
+            for (var i = 0; i < subjects.length; i++) {
+                html += '<option value="' + subjects[i].id + '">' + subjects[i].name + ' (' + subjects[i].course + ')</option>';
+            }
+            if (select) select.innerHTML = html;
+            if (quickSelect) {
+                var quickHtml = '<option value="">Select Subject</option>';
+                for (var i = 0; i < subjects.length; i++) {
+                    quickHtml += '<option value="' + subjects[i].id + '">' + subjects[i].name + ' (' + subjects[i].course + ')</option>';
+                }
+                quickSelect.innerHTML = quickHtml;
+            }
+        }
+
+        function updateUnitOptions() {
+            var subjectId = parseInt(document.getElementById('matSubject').value);
+            var subjects = getSubjects();
+            var subject = null;
+            for (var i = 0; i < subjects.length; i++) {
+                if (subjects[i].id === subjectId) {
+                    subject = subjects[i];
+                    break;
+                }
+            }
+            var unitSelect = document.getElementById('matUnit');
+            var html = '<option value="">Select Unit</option>';
+            if (subject) {
+                for (var i = 0; i < subject.units.length; i++) {
+                    html += '<option value="' + subject.units[i].id + '">Unit ' + subject.units[i].order + ': ' + subject.units[i].name + '</option>';
+                }
+            }
+            unitSelect.innerHTML = html;
+        }
+
+        function addMaterial(e) {
+            e.preventDefault();
+            var subjectId = parseInt(document.getElementById('matSubject').value);
+            var unitId = parseInt(document.getElementById('matUnit').value);
+            var type = document.getElementById('matType').value;
+            var title = document.getElementById('matTitle').value.trim();
+            var content = document.getElementById('matContent').value.trim();
+            var fileInput = document.getElementById('matFile');
+            var file = fileInput.files[0];
+
+            if (!subjectId || !unitId) {
+                showToast('Please select Subject and Unit!', 'error');
+                return;
+            }
+
+            var materials = getMaterials();
+            var fileData = '';
+            var fileName = file ? file.name : '';
+
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    fileData = event.target.result;
+                    saveMaterialData();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                saveMaterialData();
+            }
+
+            function saveMaterialData() {
+                materials.push({
+                    id: Date.now(),
+                    subjectId: subjectId,
+                    unitId: unitId,
+                    title: title,
+                    type: type,
+                    content: content,
+                    fileData: fileData,
+                    fileName: fileName,
+                    addedBy: currentUser.collegeId,
+                    addedByName: currentUser.name,
+                    date: new Date().toISOString().split('T')[0]
+                });
+                saveMaterials(materials);
+                showToast('Material uploaded!', 'success');
+                e.target.reset();
+                document.getElementById('matSubject').value = '';
+                document.getElementById('matUnit').innerHTML = '<option value="">Select Unit</option>';
+                renderAdminMaterials();
+                updateAdminReports();
+            }
+        }
+
+        function addMaterialFromModal(e) {
+            e.preventDefault();
+            var subjectId = parseInt(document.getElementById('modalSubjectId').value);
+            var unitId = parseInt(document.getElementById('modalUnitId').value);
+            var type = document.getElementById('modalMatType').value;
+            var title = document.getElementById('modalMatTitle').value.trim();
+            var content = document.getElementById('modalMatContent').value.trim();
+            var fileInput = document.getElementById('modalMatFile');
+            var file = fileInput.files[0];
+
+            var materials = getMaterials();
+            var fileData = '';
+            var fileName = file ? file.name : '';
+
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    fileData = event.target.result;
+                    saveData();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                saveData();
+            }
+
+            function saveData() {
+                materials.push({
+                    id: Date.now(),
+                    subjectId: subjectId,
+                    unitId: unitId,
+                    title: title,
+                    type: type,
+                    content: content,
+                    fileData: fileData,
+                    fileName: fileName,
+                    addedBy: currentUser.collegeId,
+                    addedByName: currentUser.name,
+                    date: new Date().toISOString().split('T')[0]
+                });
+                saveMaterials(materials);
+                showToast('Material uploaded!', 'success');
+                closeMaterialModal();
+                renderTeacherSubjects();
+                updateTeacherStats();
+            }
+        }
+
+        function addUnitFromModal(e) {
+            e.preventDefault();
+            var subjectId = parseInt(document.getElementById('modalSubjectIdForUnit').value);
+            var unitName = document.getElementById('modalUnitNameInput').value.trim();
+            var subjects = getSubjects();
+            var subject = null;
+            for (var i = 0; i < subjects.length; i++) {
+                if (subjects[i].id === subjectId) {
+                    subject = subjects[i];
+                    break;
+                }
+            }
+            if (subject) {
+                subject.units.push({
+                    id: Date.now(),
+                    name: unitName,
+                    order: subject.units.length + 1
+                });
+                saveSubjects(subjects);
+                showToast('Unit added!', 'success');
+                closeUnitModal();
+                renderTeacherSubjects();
+                updateTeacherStats();
+            }
+        }
+
+        function deleteMaterial(id) {
+            if (confirm('Delete this material?')) {
+                var materials = getMaterials();
+                var newMaterials = [];
+                for (var i = 0; i < materials.length; i++) {
+                    if (materials[i].id !== id) {
+                        newMaterials.push(materials[i]);
+                    }
+                }
+                saveMaterials(newMaterials);
+                renderAdminMaterials();
+                renderTeacherSubjects();
+                updateAdminReports();
+                updateTeacherStats();
+                showToast('Material deleted!', 'success');
+            }
+        }
+
+        function renderAdminBooks() {
+            var tbody = document.getElementById('adminBooksTable');
+            var books = getBooks();
+            var html = '';
+            for (var i = 0; i < books.length; i++) {
+                var b = books[i];
+                html += '<tr><td>#' + b.id + '</td><td><strong>' + b.title + '</strong><br><small>' + b.author + '</small></td><td>' + b.course + '</td><td>' + b.type + '</td><td>' + b.quantity + '</td><td><span class="status-badge ' + (b.available > 0 ? 'available' : 'issued') + '">' + b.available + '</span></td><td><button class="action-btn btn-danger" onclick="deleteBook(' + b.id + ')">🗑️</button></td></tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
+        function addBook(e) {
+            e.preventDefault();
+            var books = getBooks();
+            books.push({
+                id: Date.now(),
+                title: document.getElementById('bookTitle').value.trim(),
+                author: document.getElementById('bookAuthor').value.trim(),
+                publisher: document.getElementById('bookPublisher').value.trim(),
+                year: parseInt(document.getElementById('bookYear').value) || 0,
+                pages: parseInt(document.getElementById('bookPages').value) || 0,
+                isbn: document.getElementById('bookISBN').value.trim(),
+                edition: document.getElementById('bookEdition').value.trim(),
+                course: document.getElementById('bookCourse').value,
+                type: document.getElementById('bookType').value,
+                quantity: parseInt(document.getElementById('bookQuantity').value) || 1,
+                available: parseInt(document.getElementById('bookQuantity').value) || 1,
+                price: parseInt(document.getElementById('bookPrice').value) || 0,
+                status: 'active'
+            });
+            saveBooks(books);
+            showToast('Book added!', 'success');
+            e.target.reset();
+            renderAdminBooks();
+            updateAdminReports();
+        }
+
+        function deleteBook(id) {
+            if (confirm('Delete this book?')) {
+                var books = getBooks();
+                var newBooks = [];
+                for (var i = 0; i < books.length; i++) {
+                    if (books[i].id !== id) {
+                        newBooks.push(books[i]);
+                    }
+                }
+                saveBooks(newBooks);
+                renderAdminBooks();
+                updateAdminReports();
+                showToast('Book deleted!', 'success');
+            }
+        }
+
+        function renderAdminIssues() {
+            var tbody = document.getElementById('adminIssuesTable');
+            var issues = getIssues();
+            var today = new Date();
+            var html = '';
+            for (var i = 0; i < issues.length; i++) {
+                var issue = issues[i];
+                var dueDate = new Date(issue.dueDate);
+                var isOverdue = dueDate < today && issue.status === 'issued';
+                html += '<tr><td>#' + issue.id + '</td><td><strong>' + issue.bookTitle + '</strong></td><td>' + issue.studentName + '<br><small>' + issue.studentId + '</small></td><td>' + issue.issueDate + '</td><td style="color:' + (isOverdue ? '#e74c3c' : '#333') + '">' + issue.dueDate + (isOverdue ? ' ⚠️' : '') + '</td><td><span class="status-badge ' + issue.status + '">' + issue.status.toUpperCase() + '</span></td><td>' + (issue.status === 'issued' ? '<button class="action-btn btn-success" onclick="adminReturnBook(' + issue.id + ')">📤 Return</button>' : '<span style="color:#999">Returned</span>') + '</td></tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
+        function adminReturnBook(issueId) {
+            var issues = getIssues();
+            var issue = null;
+            for (var i = 0; i < issues.length; i++) {
+                if (issues[i].id === issueId) {
+                    issue = issues[i];
+                    break;
+                }
+            }
+            if (!issue) return;
+            
+            issue.status = 'returned';
+            issue.returnDate = new Date().toISOString().split('T')[0];
+            
+            var books = getBooks();
+            for (var i = 0; i < books.length; i++) {
+                if (books[i].id === issue.bookId) {
+                    books[i].available++;
+                    break;
+                }
+            }
+            saveIssues(issues);
+            saveBooks(books);
+            showToast('Book returned!', 'success');
+            renderAdminIssues();
+            updateAdminReports();
+        }
+
+        function renderAdminUsers() {
+            var tbody = document.getElementById('adminUsersTable');
+            var users = getUsers();
+            var html = '';
+            for (var i = 0; i < users.length; i++) {
+                var u = users[i];
+                var bgColor = u.role === 'admin' ? '#f8d7da' : u.role === 'teacher' ? '#d1ecf1' : '#d4edda';
+                var textColor = u.role === 'admin' ? '#e74c3c' : u.role === 'teacher' ? '#3498db' : '#2ecc71';
+                html += '<tr><td>#' + u.id + '</td><td>' + u.name + '</td><td>' + u.collegeId + '<br><small>' + u.email + '</small></td><td><span class="status-badge" style="background:' + bgColor + ';color:' + textColor + '">' + u.role + '</span></td><td><span class="status-badge ' + u.status + '">' + u.status + '</span></td><td><button class="action-btn ' + (u.status === 'active' ? 'btn-danger' : 'btn-success') + '" onclick="toggleUserStatus(' + u.id + ')">' + (u.status === 'active' ? '⛔' : '✅') + '</button></td></tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
+        function toggleUserStatus(id) {
+            var users = getUsers();
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].id === id) {
+                    users[i].status = users[i].status === 'active' ? 'inactive' : 'active';
+                    break;
+                }
+            }
+            saveUsers(users);
+            renderAdminUsers();
+            var updatedUser = users.find(function(u) { return u.id === id; });
+            showToast('User ' + (updatedUser && updatedUser.status === 'active' ? 'activated' : 'deactivated') + '!', 'success');
+        }
+
+        function updateAdminReports() {
+            var subjects = getSubjects();
+            var materials = getMaterials();
+            var users = getUsers();
+            var books = getBooks();
+            var issues = getIssues();
+            
+            var totalUnits = 0;
+            for (var i = 0; i < subjects.length; i++) {
+                totalUnits += subjects[i].units.length;
+            }
+            
+            var issuedCount = 0;
+            for (var i = 0; i < issues.length; i++) {
+                if (issues[i].status === 'issued') {
+                    issuedCount++;
+                }
+            }
+            
+            var studentCount = 0;
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].role === 'student') {
+                    studentCount++;
+                }
+            }
+            
+            document.getElementById('rptSubjects').textContent = subjects.length;
+            document.getElementById('rptUnits').textContent = totalUnits;
+            document.getElementById('rptMaterials').textContent = materials.length;
+            document.getElementById('rptBooks').textContent = books.length;
+            document.getElementById('rptIssued').textContent = issuedCount;
+            document.getElementById('rptStudents').textContent = studentCount;
+        }
+
+        // Quick Modals
+        function openQuickSubjectModal() {
+            updateQuickUnitSubjectOptions();
+            document.getElementById('quickSubjectModal').classList.add('active');
+        }
+
+        function closeQuickSubjectModal() {
+            document.getElementById('quickSubjectModal').classList.remove('active');
+            document.getElementById('quickSubName').value = '';
+            document.getElementById('quickSubCourse').value = '';
+            document.getElementById('quickSubUnits').value = '';
+            document.getElementById('quickUnitNamesContainer').innerHTML = '';
+        }
+
+        function generateQuickUnitInputs() {
+            var count = parseInt(document.getElementById('quickSubUnits').value) || 0;
+            var container = document.getElementById('quickUnitNamesContainer');
+            var html = '';
+            for (var i = 1; i <= count; i++) {
+                html += '<input type="text" id="quickUnitName' + i + '" placeholder="Unit ' + i + ' Name" required>';
+            }
+            container.innerHTML = html;
+        }
+
+        function quickAddSubject(e) {
+            e.preventDefault();
+            var name = document.getElementById('quickSubName').value.trim();
+            var course = document.getElementById('quickSubCourse').value;
+            var unitCount = parseInt(document.getElementById('quickSubUnits').value);
+            var subjects = getSubjects();
+            var units = [];
+            for (var i = 1; i <= unitCount; i++) {
+                var input = document.getElementById('quickUnitName' + i);
+                units.push({
+                    id: Date.now() + i,
+                    name: input ? input.value.trim() : 'Unit ' + i,
+                    order: i
+                });
+            }
+            subjects.push({
+                id: Date.now(),
+                name: name,
+                course: course,
+                addedBy: currentUser.collegeId,
+                addedByName: currentUser.name,
+                units: units
+            });
+            saveSubjects(subjects);
+            showToast('Subject "' + name + '" with ' + unitCount + ' units created!', 'success');
+            closeQuickSubjectModal();
+            updateSubjectOptions();
+            updateQuickUnitSubjectOptions();
+            renderAdminSubjects();
+            updateAdminReports();
+        }
+
+        function openQuickUnitModal() {
+            updateQuickUnitSubjectOptions();
+            document.getElementById('quickUnitModal').classList.add('active');
+        }
+
+        function closeQuickUnitModal() {
+            document.getElementById('quickUnitModal').classList.remove('active');
+            document.getElementById('quickUnitSubject').value = '';
+            document.getElementById('quickUnitName').value = '';
+        }
+
+        function updateQuickUnitSubjectOptions() {
+            var subjects = getSubjects();
+            var select = document.getElementById('quickUnitSubject');
+            var html = '<option value="">Select Subject</option>';
+            for (var i = 0; i < subjects.length; i++) {
+                html += '<option value="' + subjects[i].id + '">' + subjects[i].name + ' (' + subjects[i].course + ')</option>';
+            }
+            select.innerHTML = html;
+        }
+
+        function quickAddUnit(e) {
+            e.preventDefault();
+            var subjectId = parseInt(document.getElementById('quickUnitSubject').value);
+            var unitName = document.getElementById('quickUnitName').value.trim();
+            var subjects = getSubjects();
+            var subject = null;
+            for (var i = 0; i < subjects.length; i++) {
+                if (subjects[i].id === subjectId) {
+                    subject = subjects[i];
+                    break;
+                }
+            }
+            if (subject) {
+                subject.units.push({
+                    id: Date.now(),
+                    name: unitName,
+                    order: subject.units.length + 1
+                });
+                saveSubjects(subjects);
+                showToast('Unit "' + unitName + '" added to "' + subject.name + '"!', 'success');
+                closeQuickUnitModal();
+                updateUnitOptions();
+                renderAdminSubjects();
+            }
+        }
+
+        function openMaterialModal(subjectId, subjectName, unitId, unitName) {
+            document.getElementById('modalSubjectId').value = subjectId;
+            document.getElementById('modalUnitId').value = unitId;
+            document.getElementById('modalSubjectName').value = subjectName;
+            document.getElementById('modalUnitName').value = unitName;
+            document.getElementById('materialModal').classList.add('active');
+        }
+
+        function closeMaterialModal() {
+            document.getElementById('materialModal').classList.remove('active');
+            document.getElementById('modalMatType').value = '';
+            document.getElementById('modalMatTitle').value = '';
+            document.getElementById('modalMatContent').value = '';
+        }
+
+        function openUnitModal(subjectId, subjectName) {
+            document.getElementById('modalSubjectIdForUnit').value = subjectId;
+            document.getElementById('modalSubNameDisplay').value = subjectName;
+            document.getElementById('unitModal').classList.add('active');
+        }
+
+        function closeUnitModal() {
+            document.getElementById('unitModal').classList.remove('active');
+            document.getElementById('modalUnitNameInput').value = '';
+        }
+
+        function getFileIcon(type) {
+            var icons = {
+                'PDF': '📕',
+                'DOC': '📘',
+                'PPT': '📙',
+                'Notes': '📝',
+                'Question Paper': '📄'
+            };
+            return icons[type] || '📄';
+        }
+
+        function showToast(message, type) {
+            var container = document.getElementById('toastContainer');
+            var toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            var icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            toast.innerHTML = '<span>' + icon + '</span><span>' + message + '</span>';
+            container.appendChild(toast);
+            setTimeout(function() {
+                toast.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(function() {
+                    toast.remove();
+                }, 300);
+            }, 3500);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initDatabase();
+        });
+    </script>
+</body>
+</html>
